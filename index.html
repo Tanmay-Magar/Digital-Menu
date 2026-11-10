@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#11100d">
+<meta name="description" content="Explore the Gokul Pure Veg and Pizzeria menu.">
+<title>Gokul | Digital Menu</title>
+<style>
+:root{--bg:#11100d;--panel:#1c1913;--gold:#e8bd62;--gold2:#f5d996;--cream:#f7f0df;--muted:#b9ad96}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--cream);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{padding:26px 18px 18px;text-align:center;background:radial-gradient(ellipse at top,#49351a 0,#17130e 48%,#11100d 100%);border-bottom:1px solid #725222}
+.brand{font-family:Georgia,serif;font-size:clamp(30px,7vw,48px);font-weight:700;letter-spacing:3px;color:var(--gold2);margin:0}
+.sub{margin:7px 0 0;color:#eee1c4;font-size:14px;letter-spacing:1.2px}
+.tag{display:inline-block;margin-top:13px;padding:6px 13px;border:1px solid #98733b;border-radius:99px;color:var(--gold2);font-size:12px;letter-spacing:1px}
+nav{position:sticky;top:0;z-index:5;background:rgba(17,16,13,.96);backdrop-filter:blur(12px);border-bottom:1px solid #4b3a20;padding:10px 12px;display:flex;gap:8px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}.navbtn{white-space:nowrap;border:1px solid #66502b;background:#211c14;color:#e9d7ad;padding:9px 13px;border-radius:99px;font-size:13px;cursor:pointer}
+.navbtn.active,.navbtn:hover{background:var(--gold);color:#17120a;border-color:var(--gold)}
+main{max-width:900px;margin:0 auto;padding:20px 14px 60px}
+.intro{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 2px 18px}
+.intro h2{font-family:Georgia,serif;font-size:22px;margin:0;color:var(--gold2)}
+.intro p{margin:4px 0 0;color:var(--muted);font-size:13px}
+.hint{font-size:11px;color:#b9a77f;border:1px solid #4c3b20;border-radius:8px;padding:8px 10px;white-space:nowrap}
+section{scroll-margin-top:76px;margin:0 0 28px}
+.section-title{display:flex;align-items:center;gap:10px;margin:0 2px 11px;color:var(--gold2);font-family:Georgia,serif;font-size:19px}
+.section-title:after{content:"";height:1px;background:linear-gradient(90deg,#80602d,transparent);flex:1}
+.page{width:100%;display:block;border:1px solid #755b2e;border-radius:13px;box-shadow:0 10px 30px #0008;cursor:zoom-in;background:#211b11}
+footer{text-align:center;padding:25px 15px 35px;border-top:1px solid #594522;color:#c6b58e;font-size:13px}
+footer strong{display:block;color:var(--gold2);font-family:Georgia,serif;font-size:18px;margin-bottom:5px}
+#viewer{position:fixed;inset:0;background:#080706f2;z-index:10;display:none;align-items:center;justify-content:center;padding:12px}
+#viewer.open{display:flex}#viewer img{max-width:100%;max-height:94vh;object-fit:contain;border-radius:8px}
+.close{position:absolute;top:12px;right:14px;border:1px solid #8d7446;background:#211b12;color:white;border-radius:50%;width:42px;height:42px;font-size:24px;cursor:pointer}
+@media(min-width:700px){main{padding-top:28px}.page{max-width:760px;margin:auto}.section-title{max-width:760px;margin:0 auto 12px}}
+</style>
+</head>
+<body>
+<header>
+  <h1 class="brand">GOKUL</h1>
+  <p class="sub">PURE VEG &amp; PIZZERIA</p>
+  <span class="tag">PURE VEG · GREAT FOOD · HAPPY PEOPLE</span>
+</header>
+<nav id="nav" aria-label="Menu categories"></nav>
+<main>
+  <div class="intro">
+    <div><h2>Our Menu</h2><p>Freshly prepared. Made to be enjoyed.</p></div>
+    <span class="hint">Tap a page to enlarge</span>
+  </div>
+  <div id="sections"></div>
+</main>
+<footer><strong>GOKUL · PURE VEG &amp; PIZZERIA</strong>Good Food · Happy People<br>Thank you for dining with us.</footer>
+<div id="viewer" role="dialog" aria-modal="true" aria-label="Enlarged menu page">
+  <button class="close" aria-label="Close enlarged menu">&times;</button><img alt="Enlarged menu page">
+</div>
+<script>
+const menu = [
+ ["Veg Starters","assets/menu-1.webp"],
+ ["Pizza & Mocktails","assets/menu-2.webp"],
+ ["Chinese Special","assets/menu-3.webp"],
+ ["Chinese Rice","assets/menu-4.webp"],
+ ["Maharashtrian Thaska","assets/menu-5.webp"],
+ ["Punjabi Menu","assets/menu-6.webp"],
+ ["Rice Delights","assets/menu-7.webp"],
+ ["Roti & Breads","assets/menu-8.webp"],
+ ["Cafe Menu","assets/menu-9.webp"]
+];
+const nav=document.getElementById('nav'), sections=document.getElementById('sections');
+menu.forEach(([name,src],i)=>{
+ const id='category-'+(i+1);
+ const b=document.createElement('button'); b.className='navbtn'; b.textContent=name;
+ b.addEventListener('click',()=>document.getElementById(id).scrollIntoView({behavior:'smooth'}));
+ nav.appendChild(b);
+ const s=document.createElement('section'); s.id=id;
+ const h=document.createElement('h3'); h.className='section-title'; h.textContent=name;
+ const img=document.createElement('img'); img.className='page'; img.src=src; img.alt='Gokul '+name+' menu'; img.loading=i===0?'eager':'lazy';
+ img.addEventListener('click',()=>{viewerImg.src=src;viewer.classList.add('open')});
+ s.append(h,img); sections.appendChild(s);
+});
+const viewer=document.getElementById('viewer'),viewerImg=viewer.querySelector('img');
+function closeViewer(){viewer.classList.remove('open');viewerImg.src=''}
+viewer.querySelector('.close').addEventListener('click',closeViewer);
+viewer.addEventListener('click',e=>{if(e.target===viewer)closeViewer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeViewer()});
+const buttons=[...document.querySelectorAll('.navbtn')];
+const observer=new IntersectionObserver(entries=>entries.forEach(e=>{
+ if(e.isIntersecting){const i=menu.findIndex((_,n)=>'category-'+(n+1)===e.target.id);buttons.forEach((b,j)=>b.classList.toggle('active',i===j));}
+}),{rootMargin:'-25% 0px -65% 0px'});
+document.querySelectorAll('section').forEach(s=>observer.observe(s));
+</script>
+</body></html>
